@@ -1,1 +1,1 @@
-# xo
+# Tic-tac-toe game
