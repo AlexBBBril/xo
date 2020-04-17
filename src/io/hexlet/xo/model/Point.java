@@ -6,4 +6,11 @@ public class Point {
 
     public int y;
 
+    public Point() {}
+
+    public Point(int i, int j) {
+        x = i;
+        y = j;
+    }
+
 }
