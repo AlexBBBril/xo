@@ -11,57 +11,36 @@ public class WinnerController {
         int countX, countO;
         int fieldSize = field.getSize();
 
-        String[][] combinations = new String[fieldSize*2+2][];
+        String[][] combinations = concatAll(
+                getLineCombinations(fieldSize, field, true),
+                getLineCombinations(fieldSize, field, false),
+                getDiagonalCombinations(fieldSize, field, 0, 1),
+                getDiagonalCombinations(fieldSize, field, fieldSize-1, -1)
+        );
 
-        var result = getLineCombinations(fieldSize, field, true);
-        var result1 = getLineCombinations(fieldSize, field, false);
-        var result3 = getDiagonalCombinations(fieldSize, field, 0, 1);
-        var result4 = getDiagonalCombinations(fieldSize, field, fieldSize-1, -1);
+        for (String[] combination : combinations) {
+            countX = 0;
+            countO = 0;
 
-        combinations = concatAll(result, result1, result3, result4);
-
-        for (int i = 0; i < combinations.length; i++) {
-            for (int j = 0; j < combinations[i].length; j++) {
-
+            for (String s : combination) {
+                switch (s) {
+                    case "":
+                        continue;
+                    case "X":
+                        countX++;
+                        break;
+                    case "O":
+                        countO++;
+                }
             }
 
-//            switch (figure) {
-//                case "X":
-//
-//                    break;
-//                case "Y":
-//
-//                    break;
-//                default:
-//                    continue;
-//                    break;
-//            }
+            if (fieldSize == countX) {
+                return "X";
+            }
+            if (fieldSize == countO) {
+                return "O";
+            }
         }
-
-
-//        for (int x = 0; x < fieldSize; x++) {
-//            for (int y = 0; y < fieldSize; y++) {
-//                String figure = field.getFigure(new Point(x, y));
-//                switch (figure) {
-//                    case "X":
-//
-//                        break;
-//                    case "Y":
-//
-//                        break;
-//                    default:
-//                        continue;
-//                        break;
-//                }
-//
-//            }
-//        }
-
-//        if (fieldSize == countO) {
-//            return "O";
-//        } else if (fieldSize == countX) {
-//            return "X";
-//        }
 
         return null;
     }
@@ -73,9 +52,9 @@ public class WinnerController {
             String[] temp = new String[size];
             for (int y = 0; y < size; y++) {
                 if (isHorizontal) {
-                    temp[y] = field.getFigure(new Point(x, y));
+                    temp[y] = createFigure(field, new Point(x, y));
                 } else {
-                    temp[y] = field.getFigure(new Point(y, x));
+                    temp[y] = createFigure(field, new Point(y, x));
                 }
             }
             line[x] = temp;
@@ -84,12 +63,20 @@ public class WinnerController {
         return line;
     }
 
+    private String createFigure(Field field, Point point) {
+        String figure = field.getFigure(point);
+        if (null == figure){
+            figure = "";
+        }
+        return figure;
+    }
+
     private String[][] getDiagonalCombinations(int size, Field field, int y, int yMagnifier){
         String[][] line = new String[1][];
 
         String[] temp = new String[size];
         for (int x = 0; x < size; x++) {
-            temp[y] = field.getFigure(new Point(x, y));
+            temp[y] = createFigure(field, new Point(x, y));;
             y = y + yMagnifier;
         }
 
@@ -98,6 +85,7 @@ public class WinnerController {
         return line;
     }
 
+    @SafeVarargs
     public static <T> T[] concatAll(T[] first, T[]... rest) {
         int totalLength = first.length;
         for (T[] array : rest) {
