@@ -2,13 +2,13 @@ package io.hexlet.xo.model;
 
 public class Player {
 
-    public String name;
+    private final String name;
 
-    public String figure;
+    private final String figure;
 
-    public Player(String name, String figure) {
-        this.name = name;
-        this.figure = figure;
+    public Player(PlayerBuilder builder) {
+        this.name = builder.getName();
+        this.figure = builder.getFigure();
     }
 
     public String getName() {
