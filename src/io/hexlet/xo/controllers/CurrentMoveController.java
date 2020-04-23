@@ -6,27 +6,28 @@ import io.hexlet.xo.model.Point;
 public class CurrentMoveController {
 
     public String currentMove(final Field field) {
-        int sizeX = 0;
-        int sizeO = 0;
-
-        int fieldSize = field.getSize();
-
-        for (int i = 0; i < fieldSize; i++) {
-            for (int j = 0; j < fieldSize; j++) {
-                String figure = field.getFigure(new Point(i, j));
-
-                if ("X".equals(figure)) {
-                    sizeX++;
-                } else if(("O").equals(figure)) {
-                    sizeO++;
-                }
-            }
+        int countFigure = 0;
+        for (int x = 0; x < field.getSize(); x++) {
+            countFigure += countFiguresInTheRow(field, x);
         }
 
-        if (sizeX > sizeO) {
-            return "O";
-        } else {
+        if (countFigure == field.getSize() * field.getSize())
+            return null;
+
+        if (countFigure % 2 == 0)
             return "X";
+
+        return "O";
+    }
+
+    private int countFiguresInTheRow(final Field field, final Integer row) {
+        int countFigure = 0;
+        for (int x = 0; x < field.getSize(); x++) {
+            Point point = new Point(x, row);
+
+            if (field.getFigure(point) != null)
+                countFigure++;
         }
+        return countFigure;
     }
 }

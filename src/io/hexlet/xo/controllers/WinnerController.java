@@ -8,95 +8,75 @@ import java.util.Arrays;
 public class WinnerController {
 
     public String getWinner(final Field field) {
-        int countX, countO;
-        int fieldSize = field.getSize();
-
-        String[][] combinations = concatAll(
-                getLineCombinations(fieldSize, field, true),
-                getLineCombinations(fieldSize, field, false),
-                getDiagonalCombinations(fieldSize, field, 0, 1),
-                getDiagonalCombinations(fieldSize, field, fieldSize-1, -1)
-        );
-
-        for (String[] combination : combinations) {
-            countX = 0;
-            countO = 0;
-
-            for (String s : combination) {
-                switch (s) {
-                    case "":
-                        continue;
-                    case "X":
-                        countX++;
-                        break;
-                    case "O":
-                        countO++;
-                }
-            }
-
-            if (fieldSize == countX) {
-                return "X";
-            }
-            if (fieldSize == countO) {
-                return "O";
-            }
+        String winner;
+        for (int i = 0; i < field.getSize(); i++) {
+            winner = checkRow(field, i);
+            if (winner != null) return winner;
+            winner = checkColumn(field, i);
+            if (winner != null) return winner;
         }
+        winner = checkDiag1(field);
+        if (winner != null) return winner;
+        winner = checkDiag2(field);
+        if (winner != null) return winner;
 
         return null;
     }
 
-    private String[][] getLineCombinations(int size, Field field, boolean isHorizontal){
-        String[][] line = new String[size][];
+    private String checkDiag1(final Field field) {
+        Point p1 = new Point(0, 0);
+        Point p2 = new Point(1, 1);
+        Point p3 = new Point(2, 2);
 
-        for (int x = 0; x < size; x++) {
-            String[] temp = new String[size];
-            for (int y = 0; y < size; y++) {
-                if (isHorizontal) {
-                    temp[y] = createFigure(field, new Point(x, y));
-                } else {
-                    temp[y] = createFigure(field, new Point(y, x));
-                }
-            }
-            line[x] = temp;
+        if (field.getFigure(p1) != null && field.getFigure(p2) != null &&
+                field.getFigure(p3) != null &&
+                field.getFigure(p1).equals(field.getFigure(p2)) &&
+                field.getFigure(p1).equals(field.getFigure(p3))) {
+            return field.getFigure(p1);
         }
-
-        return line;
+        return null;
     }
 
-    private String createFigure(Field field, Point point) {
-        String figure = field.getFigure(point);
-        if (null == figure){
-            figure = "";
+    private String checkDiag2(final Field field) {
+
+        Point p1 = new Point(2, 0);
+        Point p2 = new Point(1, 1);
+        Point p3 = new Point(0, 2);
+
+        if (field.getFigure(p1) != null && field.getFigure(p2) != null
+                && field.getFigure(p3) != null &&
+                field.getFigure(p1).equals(field.getFigure(p2)) &&
+                field.getFigure(p1).equals(field.getFigure(p3))) {
+            return field.getFigure(p1);
         }
-        return figure;
+        return null;
     }
 
-    private String[][] getDiagonalCombinations(int size, Field field, int y, int yMagnifier){
-        String[][] line = new String[1][];
+    private String checkColumn(final Field field, final Integer i) {
+        Point p1 = new Point(0, i);
+        Point p2 = new Point(1, i);
+        Point p3 = new Point(2, i);
 
-        String[] temp = new String[size];
-        for (int x = 0; x < size; x++) {
-            temp[y] = createFigure(field, new Point(x, y));;
-            y = y + yMagnifier;
+        if (field.getFigure(p1) != null && field.getFigure(p2) != null
+                && field.getFigure(p3) != null &&
+                field.getFigure(p1).equals(field.getFigure(p2)) &&
+                field.getFigure(p1).equals(field.getFigure(p3))) {
+            return field.getFigure(p1);
         }
-
-        line[0] = temp;
-
-        return line;
+        return null;
     }
 
-    @SafeVarargs
-    public static <T> T[] concatAll(T[] first, T[]... rest) {
-        int totalLength = first.length;
-        for (T[] array : rest) {
-            totalLength += array.length;
+    private String checkRow(final Field field, final Integer i) {
+        Point p1 = new Point(i, 0);
+        Point p2 = new Point(i, 1);
+        Point p3 = new Point(i, 2);
+
+        if (field.getFigure(p1) != null && field.getFigure(p2) != null
+                && field.getFigure(p3) != null &&
+                field.getFigure(p1).equals(field.getFigure(p2)) &&
+                field.getFigure(p1).equals(field.getFigure(p3))) {
+            return field.getFigure(p1);
         }
-        T[] result = Arrays.copyOf(first, totalLength);
-        int offset = first.length;
-        for (T[] array : rest) {
-            System.arraycopy(array, 0, result, offset, array.length);
-            offset += array.length;
-        }
-        return result;
+        return null;
     }
 }

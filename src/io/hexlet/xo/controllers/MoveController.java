@@ -8,7 +8,7 @@ public class MoveController {
     public boolean applyFigure(final Field field,
                                final Point point,
                                final String figure) {
-        if (checkCoordinate(point.x) && checkCoordinate(point.x) && null == field.getFigure(point)) {
+        if (checkCoordinate(point.getX()) && checkCoordinate(point.getY()) && null == field.getFigure(point)) {
 
             field.setFigure(point, figure);
 
@@ -20,7 +20,7 @@ public class MoveController {
 
     private boolean checkCoordinate(final int coordinate) {
 
-        return coordinate >= 0 && coordinate < Field.FIELD_SIZE;
+        return coordinate >= 0 && coordinate < 3;
     }
 
 }
