@@ -2,26 +2,34 @@ package io.hexlet.xo.model;
 
 public class Game {
 
-    public Player player1;
+    private final Player player1;
 
-    public Player player2;
+    private final Player player2;
 
-    public Field field;
+    private final Field field;
 
-    public String name;
+    private final String name;
 
-    public Game(Player player1, Player player2, Field field, String name) {
-        this.player1 = player1;
-        this.player2 = player2;
-        this.field = field;
-        this.name = name;
+    public Game(final GameBuilder builder) {
+        this.player1 = builder.getPlayer1();
+        this.player2 = builder.getPlayer2();
+        this.field = builder.getField();
+        this.name = builder.getName();
     }
 
     public Player getPlayer1() {
-        return player1;
+        return this.player1;
     }
 
     public Player getPlayer2() {
-        return player2;
+        return this.player2;
+    }
+
+    public Field getField() {
+        return field;
+    }
+
+    public String getName() {
+        return name;
     }
 }
