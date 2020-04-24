@@ -18,5 +18,6 @@ public class Player {
     public String getFigure() {
         return figure;
     }
-    
+
+    public void test () {}
 }
