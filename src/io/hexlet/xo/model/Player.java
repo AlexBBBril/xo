@@ -6,7 +6,7 @@ public class Player {
 
     private final String figure;
 
-    public Player(PlayerBuilder builder) {
+    Player(PlayerBuilder builder) {
         this.name = builder.getName();
         this.figure = builder.getFigure();
     }
@@ -18,4 +18,6 @@ public class Player {
     public String getFigure() {
         return figure;
     }
+
+    public void test () {}
 }
