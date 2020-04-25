@@ -1,14 +1,15 @@
 package io.hexlet.xo.controllers;
 
 import io.hexlet.xo.model.Field;
+import io.hexlet.xo.model.Figure;
 import io.hexlet.xo.model.Point;
 
 import java.util.Arrays;
 
 public class WinnerController {
 
-    public String getWinner(final Field field) {
-        String winner;
+    public Figure getWinner(final Field field) {
+        Figure winner;
         for (int i = 0; i < field.getSize(); i++) {
             winner = checkRow(field, i);
             if (winner != null) return winner;
@@ -23,7 +24,7 @@ public class WinnerController {
         return null;
     }
 
-    private String checkDiag1(final Field field) {
+    private Figure checkDiag1(final Field field) {
         Point p1 = new Point(0, 0);
         Point p2 = new Point(1, 1);
         Point p3 = new Point(2, 2);
@@ -37,7 +38,7 @@ public class WinnerController {
         return null;
     }
 
-    private String checkDiag2(final Field field) {
+    private Figure checkDiag2(final Field field) {
 
         Point p1 = new Point(2, 0);
         Point p2 = new Point(1, 1);
@@ -52,7 +53,7 @@ public class WinnerController {
         return null;
     }
 
-    private String checkColumn(final Field field, final Integer i) {
+    private Figure checkColumn(final Field field, final Integer i) {
         Point p1 = new Point(0, i);
         Point p2 = new Point(1, i);
         Point p3 = new Point(2, i);
@@ -66,7 +67,7 @@ public class WinnerController {
         return null;
     }
 
-    private String checkRow(final Field field, final Integer i) {
+    private Figure checkRow(final Field field, final Integer i) {
         Point p1 = new Point(i, 0);
         Point p2 = new Point(i, 1);
         Point p3 = new Point(i, 2);

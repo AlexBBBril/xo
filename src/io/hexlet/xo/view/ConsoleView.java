@@ -27,7 +27,7 @@ public class ConsoleView {
             if (y != 0)
                 sb.append("|");
             sb.append(" ");
-            String figure = field.getFigure(new Point(x, y));
+            Figure figure = field.getFigure(new Point(x, y));
             sb.append(figure != null ? figure : " ");
             sb.append(" ");
         }

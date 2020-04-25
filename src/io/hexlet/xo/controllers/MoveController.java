@@ -1,13 +1,14 @@
 package io.hexlet.xo.controllers;
 
 import io.hexlet.xo.model.Field;
+import io.hexlet.xo.model.Figure;
 import io.hexlet.xo.model.Point;
 
 public class MoveController {
 
     public boolean applyFigure(final Field field,
                                final Point point,
-                               final String figure) {
+                               final Figure figure) {
         if (checkCoordinate(point.getX()) && checkCoordinate(point.getY()) && null == field.getFigure(point)) {
 
             field.setFigure(point, figure);
