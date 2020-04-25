@@ -1,96 +1,79 @@
 import io.hexlet.xo.model.*;
 import io.hexlet.xo.model.Point;
-import io.hexlet.xo.view.*;
-import io.hexlet.xo.controllers.*;
+import io.hexlet.xo.view.ConsoleView;
 
 public class Main {
 
     public static void main(String... args) {
+        final Player p1 = new Player("Slava", Figure.X);
+        final Player p2 = new Player("Gleb", Figure.O);
         final Field field = new Field();
-        final CurrentMoveController cmc = new CurrentMoveController();
+        final Game game = new GameBuilder().player1(p1).player2(p2).field(field).name("XO").build();
+        final ConsoleView cv = new ConsoleView();
 
 
-        if (!cmc.currentMove(field).equals("X")){
-            throw new RuntimeException("do not returns X when the field is empty");
+        field.setFigure(new Point(0, 0), Figure.O);
+        field.setFigure(new Point(1, 0), Figure.X);
+        field.setFigure(new Point(0, 1), Figure.X);
+        field.setFigure(new Point(2, 2), Figure.O);
+
+
+        // test line
+        final StringBuilder lineBuilder = new StringBuilder();
+        final String expectedLine = " O | X |   \n";
+        cv.generateLine(field, 0, lineBuilder);
+        final String actualLine = lineBuilder.toString();
+
+        if (!expectedLine.equals(actualLine)) {
+            throw new RuntimeException(String.format("Line generated:\n01234567890\n%s instead of:\n01234567890\n%s", actualLine, expectedLine));
         }
 
-        for (int i = 0; i < field.getSize(); i++)
-            for (int i2 = 0; i2 < field.getSize(); i2++) {
-                if (i * i2 == 4) break;
-                final Point p = new Point(i, i2);
-                final String figure = (i * 3 + i2) % 2 == 0 ? "X" : "O";
-                field.setFigure(p, figure);
-                System.out.printf("putting figure: %s to the: X:%d Y:%d\n", figure, p.getX(), p.getY());
-                if (cmc.currentMove(field).equals(figure)){
-                    throw new RuntimeException(String.format("returns %s for the field", figure));
-                }
+        // test separator
 
-            }
 
-        checkField(null, null, null, null, null, null, null, null, null, null);
-        checkField("X", "X", "X", "X", null, null, null, null, null, null);
-        checkField("O", null, null, "O", "O", "O", "O", "X", null, null);
-        checkField("X", null, null, null, null, null, null, "X", "X", "X");
-        checkField("O", "O", "X", null, null, "O", null, null, null, "O");
+        // test full Field
+        final String expectedField = " O | X |   \n" +
+                "~~~~~~~~~~~\n" +
+                " X |   |   \n" +
+                "~~~~~~~~~~~\n" +
+                "   |   | O \n";
 
-        testPrivateMethod("countFiguresInTheRow", CurrentMoveController.class, Field.class, Integer.class);
-        testPublicMethod("currentMove", CurrentMoveController.class, Field.class);
-        testPublicMethod("applyFigure", MoveController.class, Field.class, Point.class, String.class);
-        testPublicMethod("getWinner", WinnerController.class, Field.class);
-        testPrivateMethod("checkDiag1", WinnerController.class, Field.class);
-        testPrivateMethod("checkDiag2", WinnerController.class, Field.class);
-        testPrivateMethod("checkColumn", WinnerController.class, Field.class, Integer.class);
-        testPrivateMethod("checkRow", WinnerController.class, Field.class, Integer.class);
+        cv.show(game);
+        final String actualField = cv.getFieldBuilder().toString();
 
-        final Player p = new PlayerBuilder().name("Slava").figure("X").build();
-        if (!p.getName().equals("Slava")) throw new RuntimeException(String.format("Player.getName returns %s instead of %s", p.getName(), "Slava"));
-        if (!p.getFigure().equals("X")) throw new RuntimeException(String.format("Player.getFigure returns %s instead of %s", p.getFigure(), "X"));
-        final Player p2 = new PlayerBuilder().name("Gleg").figure("O").build();
-        final Game g = new GameBuilder().player1(p).player2(p2).field(field).name("XO").build();
-        try {
-            if (!g.getPlayer1().equals(p)) throw new RuntimeException(String.format("Game.getPlayer1 returns %s instead of %s", g.getPlayer1(), p));
-            if (!g.getPlayer2().equals(p2)) throw new RuntimeException(String.format("Game.getPlayer2 returns %s instead of %s", g.getPlayer2(), p2));
-        } catch (NullPointerException e) {
-            throw new RuntimeException("Congratulations! You have caught NullPointerException! Your builder incorrectly created a Game object.");
+        if (!expectedField.equals(actualField)) {
+            throw new RuntimeException(String.format("Field generated:\n01234567890\n%s instead of:\n01234567890\n%s", actualField, expectedField));
         }
+
+        otherTest();
     }
 
-    private static void checkField(String winner, String... field) {
-        final Field f = new Field();
-        for (int i = 0; i < field.length; i++) {
+    private static void otherTest() {
+        final Player p1 = new Player("Slava", Figure.X);
+        final Player p2 = new Player("Gleb", Figure.O);
+        final Field field = new Field();
+        final Game game = new GameBuilder().player1(p1).player2(p2).field(field).name("XO").build();
+        final ConsoleView cv = new ConsoleView();
 
-            final int x = i % 3;
 
-            final int y = (i - i % 3) / 3;
-            final Point p = new Point(x, y);
-            f.setFigure(p, field[i]);
+        field.setFigure(new Point(2, 0), Figure.X);
+        field.setFigure(new Point(0, 1), Figure.O);
+        field.setFigure(new Point(1, 0), Figure.X);
+        field.setFigure(new Point(1, 1), Figure.O);
+        field.setFigure(new Point(0, 0), Figure.X);
 
-        }
-        final WinnerController wc = new WinnerController();
-        if (winner == null && wc.getWinner(f) != null)
-            throw new RuntimeException(String.format("Incorrectly show winner, it shows: %s", wc.getWinner(f)));
-        if (winner != null && !winner.equals(wc.getWinner(f)))
-            throw new RuntimeException(String.format("Incorrectly show winner, it shows: %s", wc.getWinner(f)));
+        // test full Field
+        final String expectedField = " X | O |   \n" +
+                "~~~~~~~~~~~\n" +
+                " X | O |   \n" +
+                "~~~~~~~~~~~\n" +
+                " X |   |   \n";
 
-    }
+        cv.show(game);
+        final String actualField = cv.getFieldBuilder().toString();
 
-    private static void testPrivateMethod(final String methodName, final Class zClass, final Class<?>... parameterTypes) {
-        try {
-            final Method field = zClass.getDeclaredMethod(methodName, parameterTypes);
-            if (!Modifier.isPrivate(field.getModifiers())) throw new RuntimeException("method " + methodName + " has incorrect visibility level");
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            throw new RuntimeException("method " + methodName + " not found");
-        }
-    }
-
-    private static void testPublicMethod(final String methodName, final Class zClass, final Class<?>... parameterTypes) {
-        try {
-            final Method field = zClass.getDeclaredMethod(methodName, parameterTypes);
-            if (!Modifier.isPublic(field.getModifiers())) throw new RuntimeException("method " + methodName + " has incorrect visibility level");
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            throw new RuntimeException("method " + methodName + " not found");
+        if (!expectedField.equals(actualField)) {
+            throw new RuntimeException(String.format("Field generated:\n01234567890\n%s instead of:\n01234567890\n%s", actualField, expectedField));
         }
     }
 }
