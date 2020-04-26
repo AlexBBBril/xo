@@ -4,10 +4,20 @@ import io.hexlet.xo.model.Game;
 import io.hexlet.xo.model.*;
 import io.hexlet.xo.model.Point;
 
-public class ConsoleView {
+public class ConsoleView implements ICoordinateGetter {
     public String lastPrint;
 
     private StringBuilder fieldBuilder;
+
+    public void show(final Field field) {
+        final StringBuilder fieldBuilder = new StringBuilder();
+        for (int x = 0; x < field.getSize(); x++) {
+            if (x != 0)
+                generateSeparator(fieldBuilder);
+            generateLine(field, x, fieldBuilder);
+        }
+        System.out.println(fieldBuilder.toString());
+    }
 
     public void show(final Game game) {
         fieldBuilder = new StringBuilder();
@@ -47,5 +57,10 @@ public class ConsoleView {
 
     public boolean move(final Game game) {
         return false;
+    }
+
+    @Override
+    public Point getMoveCoordinate(Field field) {
+        return new Point(0, 0);
     }
 }
