@@ -3,6 +3,7 @@ package io.hexlet.xo.view;
 import io.hexlet.xo.model.Field;
 import io.hexlet.xo.model.Figure;
 import io.hexlet.xo.model.Point;
+import io.hexlet.xo.model.exceptions.InvalidPointException;
 
 public class AICoordinateGetter implements ICoordinateGetter {
     private final Point[] STEPS = {
@@ -18,7 +19,7 @@ public class AICoordinateGetter implements ICoordinateGetter {
     };
 
     @Override
-    public Point getMoveCoordinate(Field field) {
+    public Point getMoveCoordinate(Field field) throws InvalidPointException {
         for (Point point: STEPS) {
             Figure figure = field.getFigure(point);
             if (null == figure) {

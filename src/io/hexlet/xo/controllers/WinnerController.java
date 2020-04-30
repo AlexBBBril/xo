@@ -3,12 +3,13 @@ package io.hexlet.xo.controllers;
 import io.hexlet.xo.model.Field;
 import io.hexlet.xo.model.Figure;
 import io.hexlet.xo.model.Point;
+import io.hexlet.xo.model.exceptions.InvalidPointException;
 
 import java.util.Arrays;
 
 public class WinnerController {
 
-    public Figure getWinner(final Field field) {
+    public Figure getWinner(final Field field) throws InvalidPointException {
         Figure winner;
         for (int i = 0; i < field.getSize(); i++) {
             winner = checkRow(field, i);
@@ -24,7 +25,7 @@ public class WinnerController {
         return null;
     }
 
-    private Figure checkDiag1(final Field field) {
+    private Figure checkDiag1(final Field field) throws InvalidPointException {
         Point p1 = new Point(0, 0);
         Point p2 = new Point(1, 1);
         Point p3 = new Point(2, 2);
@@ -38,7 +39,7 @@ public class WinnerController {
         return null;
     }
 
-    private Figure checkDiag2(final Field field) {
+    private Figure checkDiag2(final Field field) throws InvalidPointException {
 
         Point p1 = new Point(2, 0);
         Point p2 = new Point(1, 1);
@@ -53,7 +54,7 @@ public class WinnerController {
         return null;
     }
 
-    private Figure checkColumn(final Field field, final Integer i) {
+    private Figure checkColumn(final Field field, final Integer i) throws InvalidPointException {
         Point p1 = new Point(0, i);
         Point p2 = new Point(1, i);
         Point p3 = new Point(2, i);
@@ -67,7 +68,7 @@ public class WinnerController {
         return null;
     }
 
-    private Figure checkRow(final Field field, final Integer i) {
+    private Figure checkRow(final Field field, final Integer i) throws InvalidPointException {
         Point p1 = new Point(i, 0);
         Point p2 = new Point(i, 1);
         Point p3 = new Point(i, 2);
